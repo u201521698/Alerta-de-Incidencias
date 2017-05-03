@@ -1,0 +1,1173 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width ,minimal-ui ,initial-scale=1.0" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>Sistema de Atenci&oacute;n</oac></title>
+    
+    <!--<link href="../../bin/Microsoft.WinJS.4.3/css/ui-light.css" rel="stylesheet" />-->
+    <link href="bin/Microsoft.WinJS.4.4/css/ui-dark.css" rel="stylesheet" />
+    <script src="bin/Microsoft.WinJS.4.4/js/base.js"></script>
+    <script src="bin/Microsoft.WinJS.4.4/js/ui.js"></script>
+    
+    <!--<link href="../../bin/Microsoft.WinJS.4.3/css/ui-light-mediaplayer.css" rel="stylesheet" />-->
+
+    
+<style>
+.content,
+#app, #hub1, #hub2,#hub3,#hub4 {
+    height: 100%;
+}
+
+    #app .win-splitviewpanetoggle {
+        float: left;
+    }
+
+    /* SplitView pane content style*/
+    #app .header {
+        white-space: nowrap;
+    }
+
+    #app .title {
+        font-size: 25px;
+        left: 50px;
+        margin-top: 6px;
+        vertical-align: middle;
+        display: inline-block;
+    }
+
+    #app .nav-commands {
+        margin-top: 20px;
+    }
+
+.win-navbarcommand-button {
+    background-color: transparent;
+}
+
+#app .win-splitview-pane-hidden .win-navbarcommand-button {
+    width: 46px;
+}
+
+#app .win-splitview-pane-hidden .win-navbarcommand-label {
+    /* Workaround: Make sure pane doesn't scroll if ContentDialog restores focus to
+       NavBarCommand's label
+    */
+    visibility: hidden;
+}
+
+/*SplitView content style*/
+#app .win-splitview-content {
+ 
+}
+
+#app .contenttext {
+    margin-left: 20px;
+    margin-top: 6px;
+    height:100%;
+}
+
+/* Template for the items in the ListViews in this sample */       
+
+   .listLayoutTopHeaderTemplateRoot, .gridLayoutLeftHeaderTemplateRoot {
+        font-size: larger;
+        margin-left: 16px;
+    }
+    
+/* CSS applied to the ListViews in this sample */
+#listView,#listView2,#listView4,#listView5,listView01
+{
+    height: 100%;
+}
+
+.smallListIconTextItem
+{
+    width: 100%;
+    height: 120px;
+    padding: 5px;
+    overflow: hidden;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    overflow:hidden;
+}
+
+.smallListIconTextItem img.smallListIconTextItem-Image 
+    {
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+        margin-right:20px;
+    }
+
+ .smallListIconTextItem .smallListIconTextItem-Detail
+    {
+        margin: 5px;
+    }
+
+ .smallListIconTextItem .win-textbox
+    {
+        width: 6px;
+        overflow:hidden;
+    }
+
+.lheader, .lheader2 {
+    padding: 0px;
+    background-color: #333;
+    margin: 0px 32px 0px 7px;
+    width:242px;
+
+    }
+
+.lheader4, .lheader5 {
+    margin: 7px 24px 7px 7px;
+    padding:5px;
+    background-color: #333;
+
+    }
+
+.table {
+    border: 2px solid #ccc;
+    border-collapse: collapse;
+}
+
+.table-header {
+    background-color: rgb(43, 20, 96);
+    color: rgb(255, 255, 255);
+}
+
+.table-body > tr.table-body-row:nth-of-type(odd)  {
+    background-color: #555;
+}
+
+
+.message {
+	width: calc(100% - 48px);
+	height: 48px;
+	margin-bottom: 1px;
+	padding: 16px 24px;
+	background-color: #2B2B2B;
+}
+
+.userIcon {
+	width: 48px;
+	height: 48px;
+	float: left;
+	margin-right: 12px;
+}
+
+.userIcon img {
+	width: 48px;
+	height: 48px;
+}
+
+.messageContent {
+	width: calc(100% - 60px);
+	height: 48px;
+	float: left;
+}
+
+
+.contactInformation {
+	width: 100%;
+	height: 16px;
+}
+
+.contactName {
+	height: 16px;
+	float: left;
+	font-weight: 600;
+	font-size: 15px;
+	line-height: 15px;
+}
+
+.contactTime {
+	width: 65px;
+	height: 16px;
+	float: right;
+	text-align: right;
+	font-size: 10px;
+	line-height: 10px;
+	color: rgba(255, 255, 255, .4);
+}
+
+
+.messagePreview {
+	width: 100%;
+	height: 32px;
+	font-size: 12px;
+	line-height: 16px;
+	overflow: hidden;
+	color: rgba(255, 255, 255, .4);
+}
+
+#appHeader {
+    position: absolute;
+    z-index: 1;
+    padding-top: 12px;
+    padding-bottom: 10px;
+}
+
+.groupeditemslist {
+    height: 630px;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+    -ms-grid-column: 1;
+}
+
+    /* This selector is used to prevent ui-dark/light.css from overwriting changes
+       to .win-surface. */
+.groupeditemslist .win-horizontal.win-viewport .win-surface {
+        margin-bottom: 60px;
+        margin-left: 0px;
+        margin-right: 40px;
+        margin-top: 0px;
+    }
+
+.groupeditemslist .win-groupheader {
+        padding: 0;
+    }
+
+    /* Use grid and top level layout for truncation */
+.groupeditemslist .group-header {
+        -ms-grid-columns: minmax(0, max-content) 7px max-content;
+        -ms-grid-rows: max-content;
+        display: -ms-inline-grid;
+        line-height: 1.5;
+    }
+
+    /* Override default button styles */
+.groupeditemslist .group-header, .group-header:hover, .group-header:hover:active {
+        background: transparent;
+        border: 0;
+        margin-bottom: 1px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 1px;
+        min-height: 0;
+        padding: 0;
+    }
+
+.groupeditemslist .group-header .group-title {
+            display: inline-block;
+        }
+
+.groupeditemslist .group-header .group-chevron {
+            -ms-grid-column: 3;
+            display: inline-block;
+        }
+
+.groupeditemslist .group-header .group-chevron::before {
+                content: "\E26B";
+                font-family: 'Segoe UI Symbol';
+            }
+
+.groupeditemslist .item {
+        -ms-grid-columns: 1fr;
+        -ms-grid-rows: 1fr 40px;
+        display: -ms-grid;
+        width: 119px;
+        height: 119px;
+    }
+
+.groupeditemslist .item .item-image {
+            -ms-grid-row-span: 2;
+        }
+
+.groupeditemslist .item .item-overlay {
+            -ms-grid-row: 2;
+        }
+
+.groupeditemslist .item .item-overlay .item-title {
+                -ms-grid-row: 1;
+                overflow: hidden;
+                width: 119px;
+                font-size: 21px;
+                font-weight: lighter;
+                text-align: center;
+                color: #000;
+            }
+
+ .groupeditemslist .item .item-overlay .item-title {
+                    margin-top: 4px;
+                    max-height: 40px;
+                   overflow-x:hidden !important;
+           }
+
+@media screen and (-ms-view-state: fullscreen-landscape) and (-ms-high-contrast), screen and (-ms-view-state: fullscreen-portrait) and (-ms-high-contrast), screen and (-ms-view-state: filled) and (-ms-high-contrast) {
+.groupeditemslist .item .item-overlay {
+        color: WindowText;
+    }
+}
+
+@media screen and (-ms-view-state: snapped) {
+
+    .groupeditemslist {
+        height: 630px;
+        position: relative;
+        width: 325px;
+        z-index: 0;
+        -ms-grid-column: 1;
+                overflow-x:hidden !important;
+
+    }
+
+    .groupeditemslist .win-vertical.win-viewport .win-surface {
+            margin-bottom: 30px;
+            margin-top: 0;
+            overflow-x:hidden !important;
+        }
+
+    .groupeditemslist .win-container {
+            margin-bottom: 15px;
+            margin-left: 13px;
+            margin-right: 35px;
+            padding: 7px;
+            overflow-x:hidden !important;
+            background:#e4ac05;
+        }
+
+    .groupeditemslist .item {
+            -ms-grid-columns: 20px 1fr;
+            -ms-grid-rows: 1fr;
+            display: -ms-grid;
+            height: 60px;
+            width: 272px;
+            overflow-x:hidden !important;
+        }
+
+    .groupeditemslist .item .item-image {
+                -ms-grid-column: 1;
+                -ms-grid-row-span: 1;
+                height: 60px;
+                width: 60px;
+                overflow-x:hidden !important;
+            }
+
+    .groupeditemslist .item .item-overlay {
+                -ms-grid-column: 2;
+                -ms-grid-row: 1;
+                -ms-grid-row-align: stretch;
+                background: transparent;
+                display: inline-block;
+                margin-left: 10px;
+                padding: 0;
+                overflow-x:hidden !important;
+            }
+
+    .groupeditemslist .item .item-overlay .item-title {
+                    margin-top: 4px;
+                    max-height: 40px;
+                    width: 202px;
+                    overflow-x:hidden !important;
+                }
+
+    .groupeditemslist .item .item-overlay .item-subtitle {
+                    opacity: 0.6;
+                    width: 202px;
+                    overflow-x:hidden !important;
+                }
+
+}
+
+@media screen and (-ms-view-state: fullscreen-portrait) {
+    .groupeditemslist .win-horizontal.win-viewport .win-surface {
+        margin-left: 25px;
+    }
+}
+
+
+#hub1 .imagesFlexBox {
+    display: flex;
+    flex-flow: row wrap;
+    flex-direction: column;
+    width: calc(100% + 10px);
+    height: 100%;
+    overflow: hidden;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+#hub1 .imagesFlexBox .imageItem {
+        margin: 5px;
+    }
+
+
+
+#hub1 #listView01.win-listview,
+#hub2 #listView01.win-listview {
+  height: 100%;
+    width: 100%;
+}
+
+#hub1 #listView01.win-listview .win-container,
+#hub2 #listView01.win-listview .win-container {
+    width: 242px;
+    height: 65px;
+}
+
+/* Template for the items in the ListViews in this sample */
+#hub1 #listView01 .smallListIconTextItem,
+#hub2 #listView01 .smallListIconTextItem {
+    width: 242px;
+    height: 60px;
+    background-color: lightgray;
+}
+
+#hub1 #listView01 .smallListIconTextItem img.smallListIconTextItem-Image,
+#hub2 #listView01 .smallListIconTextItem img.smallListIconTextItem-Image {
+        float:left;
+        width: 48px;
+        height: 48px;
+        margin-right:10px;
+    }
+
+#hub1 #listView01 .smallListIconTextItem .smallListIconTextItem-Detail, 
+#hub2 #listView01 .smallListIconTextItem .smallListIconTextItem-Detail {
+        margin: 5px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color:black;
+    }
+
+#hub1 #listView01 .win-selectionbackground, 
+#hub2 #listView01 .win-selectionbackground ,
+#hub1 #listView01 .win-itembox, 
+#hub2 #listView01 .win-itembox {
+        background-color:lightgrey ;
+    }
+
+#hub1 #listView01 .win-itembox,
+#hub2 #listView01 .win-itembox,
+#hub1 #listView01 .win-checkmarkbackground,
+#hub2 #listView01 .win-checkmarkbackground, 
+#hub1 #listView01 .win-selectioncheckmarkbackground,
+#hub2 #listView01 .win-selectioncheckmarkbackground, 
+#hub1 #listView01 .win-selectioncheckmark, 
+#hub2 #listView01 .win-selectioncheckmark {
+        color:black ;
+        border-color: black;
+    }
+
+#hub4 #listView02.win-listview,
+#hub1 #listView02.win-listview {
+    height: 100%;
+    width: 100%;
+}
+
+#hub4 #listView02.win-listview .win-container,
+#hub1 #listView02.win-listview .win-container {
+    width: 242px;
+    height: 60px;
+}
+
+/* Template for the items in the ListViews in this sample */
+#hub4 #listView02 .smallListIconTextItem ,
+#hub1 #listView02 .smallListIconTextItem {
+    width: 242px;
+    height: 60px;
+    background-color: lightgray;
+}
+#hub4 #listView02 .smallListIconTextItem img.smallListIconTextItem-Image,
+#hub1 #listView02 .smallListIconTextItem img.smallListIconTextItem-Image {
+        float:left;
+        width: 48px;
+        height: 48px;
+        margin-right:10px;
+    }
+
+#hub4 #listView02 .smallListIconTextItem .smallListIconTextItem-Detail,
+#hub1 #listView02 .smallListIconTextItem .smallListIconTextItem-Detail {
+        margin: 5px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        color:black;
+    }
+
+
+</style>
+    <script>
+
+
+
+
+
+var items = [];
+
+// Generate 16 items
+
+
+var wCmds =[];
+var wCmdId = 0 ;
+var username;
+
+var activeItem
+
+function getData(){
+    username="lsantiago"
+    document.cookie = "uname" + "=" + username + ";path=/" ;
+    document.cookie = "admin=1;path=/" ;    
+
+    WinJS.xhr({ url: location.protocol + '//' + location.host+ "/data/"+Sample.ListView.table ,type:"POST",responseType:"json", data: JSON.stringify(wCmds) })
+    .done(function complete(result) {
+        // Report download.
+            var jdata =result.response;
+            nodes = jdata.data.cmds;  
+            wCmds = wCmds.filter (function(v,i,a){return !nodes.some( function(n){return n.id==v.id} ) })
+
+
+                var ids =[]    
+                wwdata =  [[{name:'actions',data:Sample.ListView.data02}],[{name:'actions',data:Sample.ListView.data02}],[{name:'conversations',data:Sample.ListView.data01},{name:'actions',data:Sample.ListView.data02}],[{name:'conversations',data:Sample.ListView.data01},{name:'messages',data:Sample.ListView.data4[0]}],[{name:Sample.ListView.table,data:Sample.ListView.data5}]][Sample.ListView.tables.indexOf(Sample.ListView.table)]
+                var ii = 0 
+                var jj = 0 
+                wwdata.forEach(function(wdata){
+                        nodes = jdata.data[wdata.name]||[];  
+                        nodes.forEach(function(n,i,ar){
+                            ids.push(n.id)
+                            var v = wdata.data.filter(function(v){return v.id==n.id })
+                            if (v.length>0){
+                                for(a in v[0]){
+                                    if (v[0][a]!==n[a]){
+                                        wdata.data.setAt(wdata.data.indexOf(v[0]),n);
+                                        break;
+                                    }
+                                } 
+                            }else{
+                                if(Sample.ListView.table=="initial"||Sample.ListView.table=="actions"||Sample.ListView.table=="mesa"||Sample.ListView.table=="default"){                    
+                                    wdata.data.unshift(n);
+                                }else{
+                                    wdata.data.push(n);                        
+                                }
+
+                            }
+                        }) 
+
+                        for(i=wdata.data.length-1;i>=0;i--){
+                            if(ids.indexOf(wdata.data.getAt(i).id)<0){
+                                wdata.data.splice(i,1)
+                            }
+                        }
+
+                    })
+
+            WinJS.Promise.timeout(3000).
+                then(function () {
+                    getData();
+            });
+            
+
+        },
+        function error(error){
+            WinJS.Promise.timeout(3000).
+                then(function () {
+                    getData();
+            });
+
+        }
+        );
+
+
+}
+
+var mySplitView = window.mySplitView = { 
+        trailClicked: WinJS.UI.eventHandler(function (ev) {
+            var trailId = ev.currentTarget.dataset.trailId;
+            Sample.ListView.table=Sample.ListView.tables[Number(trailId)];
+            for(i=Sample.ListView.data.length-1;i>=0;i--) Sample.ListView.data.pop()           
+            for(i=Sample.ListView.data2.length-1;i>=0;i--) Sample.ListView.data2.pop()                       
+            for(i=Sample.ListView.data4[0].length-1;i>=0;i--) Sample.ListView.data4[0].pop()                       
+            for(i=Sample.ListView.data5.length-1;i>=0;i--) Sample.ListView.data5.pop()                                               
+            document.querySelector(['#hub3','#hub4',"#listView2",'#hub1','#hub2'][Number(trailId)]).style.display="none"
+            document.querySelector(['#hub2','#hub3',"#hub4",'#listView2','#hub1'][Number(trailId)]).style.display="none"
+            document.querySelector(['#hub1','#hub2',"#hub3",'#hub4','#listView2'][Number(trailId)]).style.display="none"                                
+            document.querySelector(['#listView2','#hub1',"#hub2",'#hub3','#hub4'][Number(trailId)]).style.display="none"                                      
+            document.querySelector(['#hub4','#listView2',"#hub1",'#hub2','#hub3'][Number(trailId)]).style.display=""             
+            Sample.ListView.hackFixForListView()
+//          if(document.querySelector('#listView').winControl)document.querySelector('#listView').winControl.forceLayout();                    
+        }),
+        homeClicked: WinJS.UI.eventHandler(function (ev) {
+            //add remove tags
+
+        }),
+        helpClicked: WinJS.UI.eventHandler(function (ev) {
+            //add remove tags
+
+        })
+    };
+
+
+WinJS.Namespace.define("Sample.ListView", {
+    data: new WinJS.Binding.List(items),
+    data2: new WinJS.Binding.List(items),
+    data4: [new WinJS.Binding.List(items)],
+    data5: new WinJS.Binding.List(items),
+    data0: new WinJS.Binding.List([
+            {  title: "Emergencia", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic1.png" },
+            {  title: "Advertencia", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic2.png" },
+            {  title: "Bomberos", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic3.png" },
+            {  title: "Serenazgo", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic4.png" },
+            {  title: "Visita", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic5.png" },
+            {  title: "Terminado", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic6.png" },
+            {  title: "Grupos", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic7.png" },
+            {  title: "Recordatorio", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic8.png" }
+    ]),    
+    data01: new WinJS.Binding.List([]),    
+    data02: new WinJS.Binding.List([]),        
+    table: "default",
+    tables:["actions","actions","default","initial","item"],
+    sItemInvoked: WinJS.UI.eventHandler(function (ev) {
+            var index = event.detail.itemIndex;
+            var item = event.currentTarget.winControl.itemDataSource.list.getAt(index);        
+            var contentDialog = document.querySelector("#dialog2").winControl;
+            contentDialog.title=item.title;
+            activeItem = item
+            
+            document.querySelector('#dialog2 #command').value="add"
+            document.querySelector('#dialog2 #messageText').value = ""
+            document.querySelector('#dialog2 #employeeId').value= ""
+            document.querySelector('#dialog2 #address').value= ""
+
+            contentDialog.show();
+        
+        }),
+    sItemInvoked2: WinJS.UI.eventHandler(function (ev) {
+            var index = event.detail.itemIndex;
+            var item = event.currentTarget.winControl.itemDataSource.list.getAt(index);        
+            var contentDialog = document.querySelector("#dialog2").winControl;
+            contentDialog.title=item.title;
+            activeItem = item
+            contentDialog.title=item.type;
+
+            document.querySelector('#dialog2 #command').value="mod"            
+            document.querySelector('#dialog2 #messageText').value = item.text
+            document.querySelector('#dialog2 #employeeId').value= item.employeeId               
+            document.querySelector('#dialog2 #address').value= item.address                               
+                
+            contentDialog.show();
+        
+        }),
+        
+    sItemConversationInvoked: WinJS.UI.eventHandler(function (ev) {
+            var list= ev.srcElement.winControl.itemDataSource.list;
+            var ids = ev.srcElement.winControl.selection.getIndices();
+            var s= document.querySelector('#ConversationHub').winControl.sections;            
+            ids.forEach(function(v,i,a){
+                    var item = list.getAt(v);
+                    var headerElement;
+                    if(!s.some(function(v2){return(v2.aid==item.id.toString())})){
+                        var h=new  WinJS.UI.HubSection()
+                        h.header=item.name              
+                        h.isHeaderStatic=true;           
+                        s.dataSource.list.push(h);
+                        h.aid = item.id.toString();
+                        h.element.style.width="470px";
+                        h.contentElement.appendChild(document.createElement("div"));
+                        h.contentElement.firstChild.className="win-selectionstylefilled"
+                        h.contentElement.firstChild.id="listView4"                        
+                        headerElement=document.querySelector('.lheader4').cloneNode(true);
+                        headerElement.getElementsByTagName("h6")[0].innerText=item.type;
+                        headerElement.getElementsByTagName("h6")[1].innerText=item.date_time;                                                
+                        headerElement.getElementsByTagName("input")[0].value=item.username;
+                        headerElement.getElementsByTagName("input")[1].value=item.id;                        
+                        headerElement.getElementsByTagName("button")[0].onclick=function(e){
+                            var a= e.srcElement.parentElement;
+                            wCmds.push({
+                                    id:wCmdId++,
+                                    cmd:'addMsg',
+                                    data:{
+                                        text:a.querySelector('#messageText').value,
+                                        uname: username,
+                                        to_user:a.querySelector('#to_user').value,
+                                        conversationId:a.querySelector('#conversationId').value                              
+                                    }
+                                });
+                            a.querySelector('#messageText').value='';
+                            a.querySelector('#messageText').focus();
+                        };                          
+
+                        var object = new WinJS.UI.ListView(h.contentElement.firstChild,{
+                                itemDataSource:Sample.ListView.data4[0].createFiltered(new Function("item", "return item.conversationId=="+item.id+";") ).dataSource, 
+                                header: headerElement,
+                                itemTemplate: document.querySelector('.smallListIconTextTemplate5'),                                
+                                selectionMode: 'none',
+                                tapBehavior: 'none',
+                                layout: { type: WinJS.UI.ListLayout, groupHeaderPosition: 'top' }
+                            });
+
+
+                    }
+                }
+            )
+            for(i=s.length-1;i>=0;i--){
+                var h = s.getAt(i)
+                if(!!h.aid){
+                    if(!ids.some(function(v){return(list.getAt(v).id.toString()==h.aid)})){
+                        s.splice(i,1)                    
+                    }
+                }
+            }
+            
+        }),
+    
+    data3 : new WinJS.Binding.List([])    ,
+    hackFixForListView:WinJS.UI.eventHandler(function (ev) {
+        [].slice.call(document.querySelectorAll('.win-listview'))
+            .forEach(function(item){
+                item.winControl.forceLayout();
+            });
+    })
+ 
+    
+    });    
+
+  var grouped = Sample.ListView.data.createGrouped(function (item) {
+        return item.descripcion;
+    }, function (item) {
+        return {
+            descripcion:item.descripcion ,
+            capacidad:item.capacidad,
+            estado:item.estado,
+            numero:item.mesa
+        };
+    }, function (left, right) {
+        return (left.toUpperCase()>right.toUpperCase())?1:((left.toUpperCase()==right.toUpperCase())?0:-1);
+    });
+
+  var grouped2 = Sample.ListView.data2.createGrouped(function (item) {
+        return item.fecha;
+    }, function (item) {
+        return {
+            fecha:item.fecha ,
+            monto:Sample.ListView.data2.filter(function(e,i,a){return e.fecha===item.fecha }).reduce(function(b,e,i,a){return {total: Number(b.total)+Number(e.total)}}).total
+        };
+    }, function (left, right) {
+        return (left.toUpperCase()>right.toUpperCase())?1:((left.toUpperCase()==right.toUpperCase())?0:-1);
+    });
+
+Sample.ListView.Grouped=grouped
+Sample.ListView.Grouped2=grouped2
+
+WinJS.UI.processAll().done(function () {
+
+    var splitView = document.querySelector(".splitView").winControl;
+    new WinJS.UI._WinKeyboard(splitView.paneElement); 
+    getData();    
+
+    var contentDialog = document.querySelector("#dialog1").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+        
+       if (ev.detail.result=='primary'){
+            wCmds.push({id:wCmdId++,cmd:'addConversation',data:{text:document.querySelector('#dialog1 #messageText').value,type:ev.target.winControl.title,username:username}}) 
+            document.querySelector('#dialog1 #messageText').value = "" ;
+         }
+    }, false);
+
+    contentDialog.addEventListener("aftershow", function(ev){
+        document.querySelector('#dialog1 #messageText').focus();
+    }, false);    
+
+    var contentDialog = document.querySelector("#dialog2").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+        
+       if (ev.detail.result=='primary'){
+            if(document.querySelector('#dialog2 #command').value=="add"){
+                wCmds.push({id:wCmdId++,cmd:'addAction',
+                    data:{text:document.querySelector('#dialog2 #messageText').value,
+                        employeeId:document.querySelector('#dialog2 #employeeId').value,
+                        address:document.querySelector('#dialog2 #address').value,                        
+                        type:ev.target.winControl.title,username:username}}) 
+                document.querySelector('#dialog2 #messageText').value = "" ;
+            }
+            if(document.querySelector('#dialog2 #command').value=="mod"){
+
+                wCmds.push({id:wCmdId++,cmd:'modAction',
+                    data:{
+                        id:activeItem.id,
+                        text:document.querySelector('#dialog2 #messageText').value,
+                        employeeId:document.querySelector('#dialog2 #employeeId').value,
+                        address:document.querySelector('#dialog2 #address').value,                        
+                        username:username}}) 
+                document.querySelector('#dialog2 #messageText').value = "" ;
+
+            }
+            
+         }
+    }, false);
+
+    contentDialog.addEventListener("aftershow", function(ev){
+        document.querySelector('#dialog2 #messageText').focus();
+    }, false);        
+});
+
+    </script>
+</head>
+<body class="win-type-body initialized showing-output">
+
+<div id="headerTemplate" data-win-control="WinJS.Binding.Template" style="display: none">
+    <div class="simpleHeaderItem">
+        <span data-win-bind="innerText: descripcion"  ></span>
+        <span class="win-type-subtitle"  >
+            <span >Capacidad:</span><span data-win-bind="innerText: capacidad"  ></span>        
+            <span data-win-bind="innerText: estado"  ></span>                
+            <button class="win-button"  style="min-width:0px;min-height:0px;" onclick="Sample.ListView.sItemInvoked()" data-win-bind="value: numero"   >Editar</button>        
+        </span>            
+  
+    </div>
+</div>
+<div id="headerTemplateMenu" data-win-control="WinJS.Binding.Template" style="display: none">
+    <div class="simpleHeaderItem">
+    </div>
+</div>
+
+<div id="headerTemplate2" data-win-control="WinJS.Binding.Template" style="display: none">
+    <div class="simpleHeaderItem">
+        <span data-win-bind="innerText: fecha"  ></span>
+        <span class="win-type-subtitle"  >
+            <span >Total:&nbsp;</span><span data-win-bind="innerText: monto"  ></span> Soles        
+        </span>            
+  
+    </div>
+</div>
+
+
+<div class="smallListIconTextTemplate" data-win-control="WinJS.Binding.Template" >
+     <div class="smallListIconTextItem" >
+         <img src="#" class="smallListIconTextItem-Image" data-win-bind="src: imagecode"  />
+         <div class="smallListIconTextItem-Detail">
+             <h6 class="win-h6" data-win-bind="textContent: titulo"></h6>
+             <h8 class="win-h8" ><span  data-win-bind="textContent: precio"></span> Soles</h8>
+            <br/>Cantidad <span data-win-bind="innerText: cantidad"   ></span>
+         </div>
+     </div>
+ </div>
+    
+<div class="smallListIconTextTemplate4" data-win-control="WinJS.Binding.Template" >
+     <div class="smallListIconTextItem4">
+         <div class="smallListIconTextItem-Detail">
+             <h6 class="win-h6" >Documento nro:&nbsp;<span  data-win-bind="textContent: numero_doc"></span></h6>
+             <h8 class="win-h8"  >Total:&nbsp;<span  data-win-bind="textContent: total"></span> Soles</h8>            
+            <br/><button class="win-button" style="min-width:0px;min-height:0px;" onclick="Sample.ListView.sItemInvoked2()" data-win-bind="value: numero"   >Ver</button>                     
+         </div>
+     </div>
+</div>
+
+<div class="smallListIconTextTemplate5" data-win-control="WinJS.Binding.Template">
+    <div class="message" style="width:400px;" >
+        <div class="userIcon"><img src="#" data-win-bind="src: imagecode" /></div>
+        <div class="messageContent">
+            <div class="contactInformation">
+                <div class="contactName" data-win-bind="textContent: name"></div>
+                <div class="contactTime" data-win-bind="textContent: date_time; style.color: readStateColor; style.fontWeight: readStateWeight"></div>
+            </div>
+            <div class="messagePreview" data-win-bind="textContent: text; style.color: readStateColor; style.fontWeight: readStateWeight"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="smallListIconTextTemplate6" data-win-control="WinJS.Binding.Template" >
+     <div class="smallListIconTextItem6" style="width:400px;" >
+         <div class="smallListIconTextItem-Detail">
+             <h6 class="win-h6" style="font-size:x-large" ><span  data-win-bind="textContent: title"></span>&nbsp;<span style="font-size:x-small" data-win-bind="textContent: date_time"></span></h6>
+             <h8 class="win-h8"  ><span  data-win-bind="innerHTML: description"></span></h8>            
+            <br/>                     
+         </div>
+     </div>
+</div>
+
+
+<div class="itemHeaderTemplate" data-win-control="WinJS.Binding.Template">
+        <button class="group-header win-type-x-large win-type-interactive" data-win-bind="groupKey: key"
+            onclick="Application.navigator.pageControl.navigateToGroup(event.srcElement.groupKey)" role="link" tabindex="-1" type="button">
+            <span class="group-title win-type-ellipsis" data-win-bind="textContent: title"></span>
+            <span class="group-chevron"></span>
+        </button>
+</div>
+
+<div class="itemTemplate" data-win-control="WinJS.Binding.Template">
+    <div class="item">
+        <img class="item-image" src="#" data-win-bind="src: backgroundImage; alt: title" />
+        <div class="item-overlay">
+            <h4 class="item-title" data-win-bind="textContent: title"></h4>
+        </div>
+    </div>
+</div>
+
+    <div class="smallListIconTextTemplate01" data-win-control="WinJS.Binding.Template">
+        <div class="smallListIconTextItem">
+            <img src="#" class="smallListIconTextItem-Image" data-win-bind="src: imagecode" />
+            <div class="smallListIconTextItem-Detail">
+                <h4 class="win-h4" data-win-bind="textContent: type"></h4>
+                <h6 class="win-h6" data-win-bind="textContent: text"></h6>
+            </div>
+        </div>
+    </div>
+        <div class="smallListIconTextTemplate02" data-win-control="WinJS.Binding.Template">
+        <div class="smallListIconTextItem">
+            <img src="#" class="smallListIconTextItem-Image" data-win-bind="src: imagecode" />
+            <div class="smallListIconTextItem-Detail">
+                <h4 class="win-h4" data-win-bind="textContent: type"></h4>
+                <h6 class="win-h6" data-win-bind="textContent: date_time"></h6>
+            </div>
+        </div>
+    </div>
+
+<div id="app">
+    <div class="splitView" data-win-control="WinJS.UI.SplitView">
+        <!-- Pane area -->
+        <div>
+            <div class="header">
+                <button
+                    class="win-splitviewpanetoggle"
+                    data-win-control="WinJS.UI.SplitViewPaneToggle"
+                    data-win-options="{ splitView: select('.splitView') }"
+                ></button>
+                <div class="title">Men&uacute;</div>
+            </div>
+            <div class="nav-commands">
+                <div data-trail-id="2" data-win-control="WinJS.UI.SplitViewCommand" data-win-options="{ label: 'Inicio', icon: 'home', oninvoked: mySplitView.trailClicked}"></div>
+                <div data-trail-id="3" data-win-control="WinJS.UI.SplitViewCommand" data-win-options="{ label: 'Comunicaci&oacute;n', icon: 'comment', oninvoked: mySplitView.trailClicked}"></div>
+                <div data-trail-id="1" style="display:none" data-win-control="WinJS.UI.SplitViewCommand" data-win-options="{ label: 'Incidencias', icon: 'people', oninvoked: mySplitView.trailClicked}"></div>
+                <div data-trail-id="0" data-win-control="WinJS.UI.SplitViewCommand" data-win-options="{ label: 'Acciones', icon: 'go', oninvoked: mySplitView.trailClicked}"></div>                
+                <div data-trail-id="4" data-win-control="WinJS.UI.SplitViewCommand" data-win-options="{ label: 'Noticias', icon: 'globe', oninvoked: mySplitView.trailClicked}"></div>                
+                <div data-trail-id="5" data-win-control="WinJS.UI.SplitViewCommand" data-win-options="{ label: 'Ayuda', icon: 'help', oninvoked: mySplitView.helpClicked}"></div> 
+            </div>
+
+        </div>
+
+        <!-- Content area -->
+
+        <div class="headerFooterPlaceholder" style="display:none" >
+            <div class="lheader">
+                <div class="sampleToolBar" data-win-control="WinJS.UI.ToolBar">
+                    <button data-win-control="WinJS.UI.Command" data-win-options="{id:'cmdAddConversation',tooltip:'Crear',section:'primary',type:'button', icon: 'add',onclick: Sample.outputCommand}"></button>
+                    <button data-win-control="WinJS.UI.Command" data-win-options="{id:'cmdEditConversation',tooltip:'Editar',section:'primary',type:'button',icon: 'edit',onclick: Sample.outputCommand}"></button>
+                </div>      
+            </div>
+            <div class="lheader2">
+                <div class="sampleToolBar" data-win-control="WinJS.UI.ToolBar">
+                    <button data-win-control="WinJS.UI.Command" data-win-options="{id:'cmdAddAction',tooltip:'Crear',section:'primary',type:'button', icon: 'add',onclick: Sample.outputCommand}"></button>
+                    <button data-win-control="WinJS.UI.Command" data-win-options="{id:'cmdEditAction',tooltip:'Editar',section:'primary',type:'button',icon: 'edit',onclick: Sample.outputCommand}"></button>
+                </div>      
+            </div>
+            <div class="lheader4">
+        <div class="header">
+            <h6 id="textHeader" class="win-h6" >xxxx</h6>
+            <h6 id="dateHeader" class="win-h6" >xxxx</h6>            
+            <textarea id="messageText" class="win-interactive win-textarea"  rows="4" cols="100" width="600px"></textarea> 
+            <input id="to_user"  name="to_user" type="hidden" >
+            <input id="conversationId" type="hidden" >            
+            <button class="win-button" >Enviar</button>            
+        </div>
+            </div>
+            
+        </div>
+            <div id="hub1" >        
+                <div id="appHeader">
+                    <h2 class="win-h2">Panel de Control</h2>
+                </div>        
+ 
+                <div data-win-control="WinJS.UI.Hub" >
+                    <div class="section1" data-win-control="WinJS.UI.HubSection" data-win-options="{header: 'Estad&iacute;sticas', isHeaderStatic: true}">
+                        <h4 class="win-h4" >Incidencias Cr&iacute;ticas</h4>
+                        <img class="imageItem" src="images/niftyChart.png" />
+                        <h4 class="win-h4" >Incidencias Totales</h4>                        
+                        <img class="imageItem" src="images/sensexChart.png" />
+                    </div>
+                    <div id="list" class="section2" style="width:300px" data-win-control="WinJS.UI.HubSection" data-win-options="{header: 'Conversaciones Activas', isHeaderStatic: true}">
+                        <div id="listView01"
+                            class="win-selectionstylefilled"
+                            data-win-control="WinJS.UI.ListView"
+                            data-win-options="{
+                                itemDataSource:Sample.ListView.data01.dataSource, 
+                                itemTemplate: select('.smallListIconTextTemplate01'),
+                                selectionMode: 'none',
+                                header: select('.lheader'),                                
+                                layout: { type: WinJS.UI.ListLayout},
+                                tapBehavior: 'none'
+                            }">
+                        </div>
+                    </div>
+
+                    <div class="section3" data-win-control="WinJS.UI.HubSection" style="width:600px;" data-win-options="{header: 'In&aacute;genes Recientes', isHeaderStatic: true}">
+                        <div class="imagesFlexBox">
+                            <img class="imageItem" src="images/imagen01.jpg" />
+                            <img class="imageItem" src="images/imagen02.png" />
+                            <img class="imageItem" src="images/imagen03.jpg" />
+                            <img class="imageItem" src="images/imagen04.png" />
+                            <img class="imageItem" src="images/imagen05.png" />
+                            <img class="imageItem" src="images/imagen01.jpg" />
+                            <img class="imageItem" src="images/imagen02.png" />
+                            <img class="imageItem" src="images/imagen03.jpg" />
+                            <img class="imageItem" src="images/imagen04.png" />
+                        </div>
+                    </div>
+                    <div class="section4" data-win-control="WinJS.UI.HubSection" data-win-options="{header: '&Uacute;ltimas Acciones', isHeaderStatic: true}">
+                        <div id="listView02"
+                            class="win-selectionstylefilled"
+                            data-win-control="WinJS.UI.ListView"
+                            data-win-options="{
+                                itemDataSource:Sample.ListView.data02.dataSource, 
+                                itemTemplate: select('.smallListIconTextTemplate02'),
+                                selectionMode: 'none',
+                                header: select('.lheader2'),                                                                
+                                layout: { type: WinJS.UI.ListLayout},
+                                tapBehavior: 'none'
+                            }">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="listView2"
+                class="win-selectionstylefilled"
+                data-win-control="WinJS.UI.ListView"
+                data-win-options="{
+                        itemDataSource:Sample.ListView.Grouped.dataSource, 
+                        itemTemplate: select('.smallListIconTextTemplate'),
+                        header: select('.lheader'),
+                        groupDataSource: Sample.ListView.Grouped.groups.dataSource,                        
+                        groupHeaderTemplate : select('#headerTemplate'),
+                        selectionMode: 'none',
+                        tapBehavior: 'none',
+                        layout: { type: WinJS.UI.ListLayout, groupHeaderPosition: 'top' }
+            }">
+            
+            </div>
+
+            <div id="hub4" >        
+                <div id="appHeader">
+                    <h2 class="win-h2">Conversaciones</h2>
+                </div>        
+                <div id="ActionHub" data-win-control="WinJS.UI.Hub" >
+
+
+                    <div class="section0"  data-win-control="WinJS.UI.HubSection" data-win-options="{header: 'Inicio', isHeaderStatic: true}">                    
+                        <div class="groupeditemslist win-selectionstylefilled" aria-label="List of groups" data-win-control="WinJS.UI.ListView" 
+                            data-win-options="{
+                                itemDataSource:Sample.ListView.data0.dataSource, 
+                                itemTemplate: select('.itemTemplate'),
+                                groupHeaderTemplate : select('.itemHeaderTemplate'),                                   
+                                selectionMode: 'none',
+                                oniteminvoked : Sample.ListView.sItemInvoked,
+                                layout: { type: WinJS.UI.GridLayout, groupHeaderPosition: 'top' }
+                            }">
+                        </div>
+                    </div>
+                    <div class="section0"  data-win-control="WinJS.UI.HubSection" data-win-options="{header: 'Acciones', isHeaderStatic: true}">                    
+            <div id="listView02"
+                class="win-selectionstylefilled"
+                data-win-control="WinJS.UI.ListView"
+                data-win-options="{
+                    itemDataSource:Sample.ListView.data02.dataSource, 
+                    itemTemplate: select('.smallListIconTextTemplate02'),
+                    selectionMode: 'none',
+                    header: select('.lheader2'),                                                                                    
+                    oniteminvoked : Sample.ListView.sItemInvoked2,                                                          
+                    layout: { type: WinJS.UI.ListLayout},
+                    tapBehavior: 'invokeOnly'
+                }">
+            </div>
+                    </div>
+            </div>
+                    </div>
+
+            <div id="hub2" >        
+                <div id="appHeader">
+                    <h2 class="win-h2">Conversaciones</h2>
+                </div>        
+                <div id="ConversationHub" data-win-control="WinJS.UI.Hub" >
+                    <div id="list" style="width:300px" class="section2" data-win-control="WinJS.UI.HubSection" data-win-options="{header: 'Conversaciones Activas', isHeaderStatic: true}">
+                        <div id="listView01"
+                            class="win-selectionstylefilled"
+                            data-win-control="WinJS.UI.ListView"
+                            data-win-options="{
+                                itemDataSource:Sample.ListView.data01.dataSource, 
+                                itemTemplate: select('.smallListIconTextTemplate01'),
+                                onselectionchanged : Sample.ListView.sItemConversationInvoked,                                
+                                selectionMode: 'multi',
+                                tapBehavior: 'toggleSelect',
+                                layout: { type: WinJS.UI.ListLayout}
+                            }">
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+
+            <div id="hub3" >        
+                <div id="appHeader">
+                    <h2 class="win-h2">Noticias</h2>
+                </div>        
+                <div data-win-control="WinJS.UI.Hub" >
+                    
+                    <div class="section1" data-win-control="WinJS.UI.HubSection" data-win-options="{header: 'Per&uacute; 21', isHeaderStatic: true}">
+
+            <div id="listView5"
+                class="win-selectionstylefilled"
+                data-win-control="WinJS.UI.ListView"
+                data-win-options="{
+                        itemDataSource:Sample.ListView.data5.dataSource, 
+                        itemTemplate: select('.smallListIconTextTemplate6'),
+                        selectionMode: 'none',
+                        tapBehavior: 'none',
+                        layout: { type: WinJS.UI.ListLayout, groupHeaderPosition: 'top' }
+            }">
+            
+            </div>
+                    </div>
+                </div>
+            </div>
+    </div> 
+</div>
+
+<div id="dialog1" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Iniciar Conversaci&oacute;n',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+        <textarea id="messageText" class="win-interactive win-textarea"  rows="4" cols="100" width="600px"></textarea>         
+</div>
+
+<div id="dialog2" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Iniciar Conversaci&oacute;n',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+<br/>        
+<div class="inputText">        
+        <Label>
+            Responsable<br/>
+          <select class="win-dropdown" id="employeeId">
+                                    <option value="10006">Daniel Rodriguez</option>
+                                    <option value="10007">Gema Hidalgo</option>
+                                    <option value="10008">Alfredo Aguilar</option>
+                                    <option value="10009">Elena Reyes</option>
+                                    <option value="10010">Valentin Blanco</option>
+                                    <option value="10011">Pablo Santos</option>                                    
+         </select>
+            </Label>
+</div>
+<div class="inputText">            
+        <Label>
+            Instrucciones<br/>
+        <textarea id="messageText" class="win-interactive win-textarea"  rows="4" cols="100" width="600px"></textarea>         
+            </Label>        
+</div>
+<input id="command" type="hidden" value="add" />
+<div class="inputText">            
+            
+        <Label>
+            Direcci&oacute;n<br/>
+        <textarea id="address" class="win-interactive win-textarea"  rows="2" cols="100" width="600px"></textarea>                 
+            </Label>        
+</div>
+
+            
+</div>
+    
+    
+</body>
+</html>
