@@ -1,0 +1,997 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width ,minimal-ui ,initial-scale=1.0" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>Sistema de Atenci&oacute;n</oac></title>
+    
+    <!--<link href="../../bin/Microsoft.WinJS.4.3/css/ui-light.css" rel="stylesheet" />-->
+    <link href="bin/Microsoft.WinJS.4.4/css/ui-dark.css" rel="stylesheet" />
+    <script src="bin/Microsoft.WinJS.4.4/js/base.js"></script>
+    <script src="bin/Microsoft.WinJS.4.4/js/ui.js"></script>
+    
+    <!--<link href="../../bin/Microsoft.WinJS.4.3/css/ui-light-mediaplayer.css" rel="stylesheet" />-->
+
+    
+<style>
+
+#messageList {
+
+	width: calc(100% - 5px);
+}
+
+.win-pivot-item .win-pivot-item-content {
+	padding: 0 0 0 12px;
+}
+
+.message {
+	width: calc(100% - 48px);
+	height: 48px;
+	margin-bottom: 1px;
+	padding: 16px 24px;
+	background-color: #2B2B2B;
+}
+
+.userIcon {
+	width: 48px;
+	height: 48px;
+	float: left;
+	margin-right: 12px;
+}
+
+.userIcon img {
+	width: 48px;
+	height: 48px;
+}
+
+.messageContent {
+	width: calc(100% - 60px);
+	height: 48px;
+	float: left;
+}
+
+.contactInformation {
+	width: 100%;
+	height: 16px;
+}
+
+.contactName {
+	height: 16px;
+	float: left;
+	font-weight: 600;
+	font-size: 15px;
+	line-height: 15px;
+}
+
+.contactTime {
+	width: 30px;
+	height: 16px;
+	float: right;
+	text-align: right;
+	font-size: 10px;
+	line-height: 10px;
+	color: rgba(255, 255, 255, .4);
+}
+
+.messagePreview {
+	width: 100%;
+	height: 32px;
+	font-size: 12px;
+	line-height: 16px;
+	overflow: hidden;
+	color: rgba(255, 255, 255, .4);
+}
+
+#mediaPlayerEl {
+	width: calc(100% - 53px);
+            }
+
+
+#mediaPlayerEl video {
+	width: 100%;
+            }
+
+
+.smallListIconTextItem
+{
+    width: 100%;
+    height: 70px;
+    padding: 5px;
+    overflow: hidden;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.smallListIconTextItem img.smallListIconTextItem-Image 
+    {
+        width: 60px;
+        height: 60px;
+        margin: 5px;
+        margin-right:20px;
+    }
+
+ .smallListIconTextItem .smallListIconTextItem-Detail
+    {
+        margin: 5px;
+    }
+
+
+
+.smallListIconTextItem2
+{
+    width: 100%;
+    height: 180px;
+    padding: 5px;
+    overflow: hidden;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    overflow:hidden;
+}
+
+.smallListIconTextItem2 img.smallListIconTextItem-Image 
+    {
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+        margin-right:20px;
+    }
+
+ .smallListIconTextItem2 .smallListIconTextItem-Detail
+    {
+        margin: 5px;
+    }
+
+
+ .smallListIconTextItem2 .smallListIconTextMessage
+    {
+        position:absolute;
+        width: calc(100% - 30px);
+        bottom:0px;
+    }
+
+.smallListIconTextItem3
+{
+    width: 100%;
+    height: 120px;
+    padding: 5px;
+    overflow: hidden;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    overflow:hidden;
+}
+
+.smallListIconTextItem3 img.smallListIconTextItem-Image 
+    {
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+        margin-right:20px;
+    }
+
+ .smallListIconTextItem3 .smallListIconTextItem-Detail
+    {
+        margin: 5px;
+    }
+
+ .smallListIconTextItem3 .win-textbox
+    {
+        width: 6px;
+        overflow:hidden;
+    }
+
+.smallListIconTextItem4
+{
+    width: 100%;
+    height: 80px;
+    padding: 5px;
+    overflow: hidden;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    overflow:hidden;
+}
+
+ .smallListIconTextItem4 .smallListIconTextItem-Detail
+    {
+        margin: 5px;
+    }
+
+
+/* CSS applied to the ListViews in this sample */
+.listView
+{
+    height: 100%;
+}
+
+.listView .win-container {
+    background-color: #222;
+}
+
+
+
+#msgtxtbox
+    {
+        width: 100%;
+        height: 30px;
+    }
+
+#pvi2 button {
+    min-width:20px;
+
+}
+#pvi2 input {
+    min-width:42px;
+
+}
+
+
+
+#pvi0 .win-pivot-item-content{
+    overflow-y:hidden;
+}
+
+.groupeditemslist {
+    height: 580px;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+    -ms-grid-column: 1;
+
+}
+
+    /* This selector is used to prevent ui-dark/light.css from overwriting changes
+       to .win-surface. */
+.groupeditemslist .win-horizontal.win-viewport .win-surface {
+        margin-bottom: 60px;
+        margin-left: 0px;
+        margin-right: 40px;
+        margin-top: 0px;
+    }
+
+.groupeditemslist .win-groupheader {
+        padding: 0;
+    }
+
+    /* Use grid and top level layout for truncation */
+.groupeditemslist .group-header {
+        -ms-grid-columns: minmax(0, max-content) 7px max-content;
+        -ms-grid-rows: max-content;
+        display: -ms-inline-grid;
+        line-height: 1.5;
+    }
+
+    /* Override default button styles */
+.groupeditemslist .group-header, .group-header:hover, .group-header:hover:active {
+        background: transparent;
+        border: 0;
+        margin-bottom: 1px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 1px;
+        min-height: 0;
+        padding: 0;
+    }
+
+.groupeditemslist .group-header .group-title {
+            display: inline-block;
+        }
+
+.groupeditemslist .group-header .group-chevron {
+            -ms-grid-column: 3;
+            display: inline-block;
+        }
+
+.groupeditemslist .group-header .group-chevron::before {
+                content: "\E26B";
+                font-family: 'Segoe UI Symbol';
+            }
+
+.groupeditemslist .item {
+        -ms-grid-columns: 1fr;
+        -ms-grid-rows: 1fr 40px;
+        display: -ms-grid;
+        width: 119px;
+        height: 119px;
+    }
+
+.groupeditemslist .item .item-image {
+            -ms-grid-row-span: 2;
+        }
+
+.groupeditemslist .item .item-overlay {
+            -ms-grid-row: 2;
+        }
+
+.groupeditemslist .item .item-overlay .item-title {
+                -ms-grid-row: 1;
+                overflow: hidden;
+                width: 119px;
+                font-size: 21px;
+                font-weight: lighter;
+                text-align: center;
+                color: #000;
+            }
+
+ .groupeditemslist .item .item-overlay .item-title {
+                    margin-top: 4px;
+                    max-height: 40px;
+                   overflow-x:hidden !important;
+           }
+
+@media screen and (-ms-view-state: fullscreen-landscape) and (-ms-high-contrast), screen and (-ms-view-state: fullscreen-portrait) and (-ms-high-contrast), screen and (-ms-view-state: filled) and (-ms-high-contrast) {
+.groupeditemslist .item .item-overlay {
+        color: WindowText;
+    }
+}
+
+@media screen and (-ms-view-state: snapped) {
+
+    .groupeditemslist {
+        height: 630px;
+        position: relative;
+        width: 325px;
+        z-index: 0;
+        -ms-grid-column: 1;
+                overflow-x:hidden !important;
+
+    }
+
+    .groupeditemslist .win-vertical.win-viewport .win-surface {
+            margin-bottom: 30px;
+            margin-top: 0;
+            overflow-x:hidden !important;
+        }
+
+    .groupeditemslist .win-container {
+            margin-bottom: 15px;
+            margin-left: 13px;
+            margin-right: 35px;
+            padding: 7px;
+            overflow-x:hidden !important;
+            background:#e4ac05;
+        }
+
+    .groupeditemslist .item {
+            -ms-grid-columns: 20px 1fr;
+            -ms-grid-rows: 1fr;
+            display: -ms-grid;
+            height: 60px;
+            width: 272px;
+            overflow-x:hidden !important;
+        }
+
+    .groupeditemslist .item .item-image {
+                -ms-grid-column: 1;
+                -ms-grid-row-span: 1;
+                height: 60px;
+                width: 60px;
+                overflow-x:hidden !important;
+            }
+
+    .groupeditemslist .item .item-overlay {
+                -ms-grid-column: 2;
+                -ms-grid-row: 1;
+                -ms-grid-row-align: stretch;
+                background: transparent;
+                display: inline-block;
+                margin-left: 10px;
+                padding: 0;
+                overflow-x:hidden !important;
+            }
+
+    .groupeditemslist .item .item-overlay .item-title {
+                    margin-top: 4px;
+                    max-height: 40px;
+                    width: 202px;
+                    overflow-x:hidden !important;
+                }
+
+    .groupeditemslist .item .item-overlay .item-subtitle {
+                    opacity: 0.6;
+                    width: 202px;
+                    overflow-x:hidden !important;
+                }
+
+}
+
+@media screen and (-ms-view-state: fullscreen-portrait) {
+    .groupeditemslist .win-horizontal.win-viewport .win-surface {
+        margin-left: 25px;
+    }
+}
+
+
+</style>
+    <script>
+
+var wCmds =[];
+var wCmdId = 0 ;
+var username;
+var activeConv=0;
+(function () {
+
+    var enque = new WinJS.Binding.List([
+            {  title: "Emergencia", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic1.png" },
+            {  title: "Advertencia", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic2.png" },
+            {  title: "Tramite", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic3.png" },
+            {  title: "Finalizar", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic4.png" },
+            {  title: "Calendario", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic5.png" },
+            {  title: "Terminado", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic6.png" },
+            {  title: "Grupos", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic7.png" },
+            {  title: "Recordatorio", subtitle: "", description: "", content: "", backgroundImage: "images/startmenu/HupPic8.png" }
+    ]);
+
+    var mlista = new WinJS.Binding.List([]);
+
+    var mlista2 = new WinJS.Binding.List([ ]);        
+
+    var mlista3 = new WinJS.Binding.List([ ]);        
+
+    var inbox = new WinJS.Binding.List([ ]);
+
+    var filterlist=inbox.createFiltered(function(item){
+                return (item.conversationId==activeConv);
+        });
+
+    var filterlist2=mlista3.createFiltered(function(item){
+        if (typeof(Sample)=="undefined") return false;        
+        if (!Sample.NumeroMesa) return false;  
+        if (Sample.NumeroMesa=="") return false;        
+        if(item.mesa==Sample.NumeroMesa){
+                return true;
+           }
+            return false;
+        });
+
+    var grouped = mlista.createGrouped(function (item) {
+        return item.type;
+    }, function (item) {
+        return item.type;
+    }, function (left, right) {
+        return left.charCodeAt(0) - right.charCodeAt(0);
+    });
+
+    WinJS.Namespace.define("Sample", {
+
+    inputChanged: WinJS.UI.eventHandler(function (ev) {
+
+	        var _listView = document.getElementById("slist").winControl;
+		    suma = 0; 
+
+            var list = _listView.itemDataSource.list;
+            for (var i = 0; i < list.length; i++) {
+                var item = list.getAt(i);
+                var ele = _listView.elementFromIndex(i);
+                item.n = ele.querySelector("#cantidad").value;
+                
+    		    suma = suma + Number(item.amount) * Number(item.n)   
+
+            }
+
+
+
+		    document.querySelector("#amount").innerText=suma.toFixed(2);
+
+
+
+        }),
+    inputAdd: WinJS.UI.eventHandler(function (ev) {
+
+	        var _listView = document.getElementById("slist").winControl;
+		    suma = 0; 
+
+            var list = _listView.itemDataSource.list;
+            for (var i = 0; i < list.length; i++) {
+                var item = list.getAt(i);
+                var ele = _listView.elementFromIndex(i);
+                if (ele.contains(event.srcElement)){
+                    var ip = ele.querySelector("#cantidad");
+                    ip.value = String(Number(ip.value) + 1) 
+                }
+
+            }
+
+            Sample.inputChanged();
+
+
+        }),     
+    sListItemInvoked: WinJS.UI.eventHandler(function (ev) {
+        var witem = null
+
+        mlista2.forEach(function(v,i,ar){if(v.numero===event.srcElement.value)witem=v })        
+        document.querySelector('#dialog3 #numero').value = witem.numero
+        document.querySelector('#dialog3 #tcantidad').innerText = witem.n
+        document.querySelector('#dialog3 #cantidad').value = witem.n        
+        document.querySelector('#dialog3 #indicaciones').value = witem.indicaciones
+        document.querySelector('#dialog3').winControl.show()
+
+        }),                
+        Inbox: inbox,
+        Enque: enque,
+        Filterlist: filterlist,                
+        Filterlist2: filterlist2,                        
+        Mlista: mlista,
+        Mlista2: mlista2,
+        Mlista3: mlista3,                   
+        Grouped: grouped,
+        NumeroMesa : ""
+       
+    });
+
+})();
+
+
+var statusEl = document.getElementById("status");
+var suggestionList = [];
+var username =""
+function suggestionsRequestedHandler(eventObject) {
+    var queryText = eventObject.detail.queryText,
+    query = queryText.toLowerCase(),
+    suggestionCollection = eventObject.detail.searchSuggestionCollection;
+    if (queryText.length > 0) {
+        for (var i = 0, len = suggestionList.length; i < len; i++) {
+            if (suggestionList[i].substr(0, query.length).toLowerCase() === query) {
+                suggestionCollection.appendQuerySuggestion(suggestionList[i]);
+            }
+        }
+    }
+}
+
+function querySubmittedHandler(eventObject) {
+    var queryText = eventObject.detail.queryText;
+    Sample.Qtext = queryText;
+    Sample.Mlista2.notifyReload();
+    Sample.Mlista3.notifyReload();    
+}
+
+
+WinJS.Namespace.define("Sample", {
+    suggestionsRequestedHandler: WinJS.UI.eventHandler(suggestionsRequestedHandler),
+    querySubmittedHandler: WinJS.UI.eventHandler(querySubmittedHandler),
+    selectionHandler: WinJS.UI.eventHandler(function(ev){
+        var list= ev.srcElement.winControl
+        var n = list.selection.getIndices()[0];
+        Sample.NumeroMesa= list.itemDataSource.list.getAt(n).numero;
+        Sample.Mlista2.notifyReload();
+        Sample.Mlista3.notifyReload();        
+        document.querySelector("#idmesa").innerText= list.itemDataSource.list.getAt(n).name
+
+        var suma = 0 
+        Sample.Filterlist.forEach(function(v,i,a){suma = suma + (Number(v.amount)*Number(v.n) )})        
+        document.querySelector("#amount").innerText=suma.toFixed(2);        
+        var suma = 0 
+        Sample.Filterlist2.forEach(function(v,i,ar){suma = suma + (Number(v.total))})        
+        document.querySelector("#amount2").innerText=suma.toFixed(2);        
+
+        if(document.querySelector('#slist').winControl)document.querySelector('#slist').winControl.forceLayout();        
+
+    }),
+    sItemSelection: WinJS.UI.eventHandler(function (ev) {
+            var ids = ev.srcElement.winControl.selection.getIndices();
+            var item = ev.srcElement.winControl.itemDataSource.list.getAt(ids[0]);        
+            activeConv=item.id;
+
+            Sample.Inbox.notifyReload(); 
+
+            document.querySelector('#csubtitle').innerText=item.type+" " + item.text
+    }),        
+   sItemInvoked: WinJS.UI.eventHandler(function (ev) {
+            var index = event.detail.itemIndex;
+            var item = event.currentTarget.winControl.itemDataSource.list.getAt(index);        
+            var contentDialog = document.querySelector("#dialog2").winControl;
+            contentDialog.title=item.title;
+            activeItem = item
+            
+            document.querySelector('#dialog2 #command').value="add"
+            document.querySelector('#dialog2 #messageText').value = ""
+            document.querySelector('#dialog2 #address').value= "Av Primavera 24, Santiago de Surco "
+            contentDialog.show();
+        
+        }),    
+    hackFixForListView:WinJS.UI.eventHandler(function (ev) {
+        [].slice.call(document.querySelectorAll('.win-listview'))
+            .forEach(function(item){
+                item.winControl.forceLayout();
+            });
+    })
+});
+
+function getData(){
+    username="drodriguez"
+    document.cookie = "uname" + "=" + username + ";path=/" ;
+    document.cookie = "admin=0;path=/" ;    
+    
+    WinJS.xhr({ url: location.protocol + '//' + location.host+ "/data/initial" ,type:"POST",responseType:"json", data: JSON.stringify(wCmds) })
+    .done(function complete(result) {
+        // Report download.
+            var jdata =result.response;
+            nodes = jdata.data.cmds;  
+            wCmds = wCmds.filter (function(v,i,a){return !nodes.some( function(n){return n.id==v.id} ) })
+
+           
+                var ids =[]    
+                wwdata =  [{name:'conversations',data:Sample.Mlista,push:false},{name:'messages',data:Sample.Inbox,push:false}]
+                var ii = 0 
+                var jj = 0 
+                wwdata.forEach(function(wdata){
+                        nodes = jdata.data[wdata.name]||[];  
+                        nodes.forEach(function(n,i,ar){
+                            ids.push(n.id)
+                            var v = wdata.data.filter(function(v){return v.id==n.id })
+                            if (v.length>0){
+                                for(a in v[0]){
+                                    if (v[0][a]!==n[a]){
+                                        wdata.data.setAt(wdata.data.indexOf(v[0]),n);
+                                        break;
+                                    }
+                                } 
+                            }else{
+                                if(!wdata.push){                    
+                                    wdata.data.unshift(n);
+                                }else{
+                                    wdata.data.push(n);                        
+                                }
+
+                            }
+                        }) 
+
+                        for(i=wdata.data.length-1;i>=0;i--){
+                            if(ids.indexOf(wdata.data.getAt(i).id)<0){
+                                wdata.data.splice(i,1)
+                            }
+                        }
+
+                    })
+
+            WinJS.Promise.timeout(3000).
+                then(function () {
+                    getData();
+            });
+            
+
+        },
+        function error(error){
+            WinJS.Promise.timeout(3000).
+                then(function () {
+                    getData();
+            });
+
+        }
+        );
+
+
+}
+
+
+WinJS.UI.processAll().then(function () {
+
+    getData();
+    
+    var contentDialog = document.querySelector("#dialog1").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+    	if (ev.detail.result=='primary'){
+    		var wlist = document.querySelector("#plist").winControl;
+
+    		if (wlist.selection.count() >0 ) {
+    			while(Sample.Mlista2.length>0){
+    				Sample.Mlista2.pop()
+    			} 
+    			suma = 0; 
+
+                var worder ={id:wCmdId++,cmd:'addOrder',data:{hora:new Date(), mesa:Sample.NumeroMesa,uname: username,items:[]}}
+                wCmds.push(worder)
+
+    			wlist.selection.getItems().done(function (items) {
+	           		for (var j = items.length - 1; j >= 0; j--) {
+                        worder.data.items.push({ item: items[j].data.numero , n: "1", indicaciones:"" });
+    				}
+
+    			})
+
+    			wlist.selection.clear()
+
+
+    		}
+        };
+    	
+
+    }, false);
+    var contentDialog = document.querySelector("#dialog2").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+        if (ev.detail.result=='primary'){
+                wCmds.push({id:wCmdId++,cmd:'addConversation',
+                    data:{text:document.querySelector('#dialog2 #messageText').value,
+                            address:document.querySelector('#dialog2 #address').value,                        
+                            type:ev.target.winControl.title,username:username}}) 
+                document.querySelector('#dialog2 #messageText').value = "" ;
+                document.querySelector('#dialog2 #address').value = "" ;                
+
+            
+        }
+
+
+    }, false);
+       
+    var contentDialog = document.querySelector("#dialog3").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+    	if (ev.detail.result=='primary'){
+
+           
+            wCmds.push({id:wCmdId++,cmd:'chgOrder',data:{numero:document.querySelector('#dialog3 #numero').value,cantidad:document.querySelector('#dialog3 #cantidad').value,indicaciones:document.querySelector('#dialog3 #indicaciones').value}}) 
+   
+        };
+
+    }, false);        
+
+    var contentDialog = document.querySelector("#dialog4").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+    	if (ev.detail.result=='primary'){
+            wCmds.push({id:wCmdId++,cmd:'genBill',data:{mesa:Sample.NumeroMesa}}) 
+   
+        };
+
+    }, false);        
+    var contentDialog = document.querySelector("#dialog6").winControl;
+    contentDialog.addEventListener("beforehide", function(ev){
+    	if (ev.detail.result=='primary'){
+            wCmds.push({id:wCmdId++,cmd:'cancelBill',data:{mesa:Sample.NumeroMesa}}) 
+   
+        };
+
+    }, false);        
+    
+});
+
+
+    </script>
+</head>
+<body class="win-type-body initialized showing-output">
+
+<div class="messageTemplate" data-win-control="WinJS.Binding.Template">
+    <div class="message">
+        <div class="userIcon"><img src="#" data-win-bind="src: imagecode" /></div>
+        <div class="messageContent">
+            <div class="contactInformation">
+                <div class="contactName" data-win-bind="textContent: name"></div>
+                <div class="contactTime" data-win-bind="textContent: date_time;"></div>
+            </div>
+            <div class="messagePreview" data-win-bind="textContent: text; style.color: readStateColor; style.fontWeight: readStateWeight"></div>
+        </div>
+    </div>
+</div>
+
+<div class="itemTemplate" data-win-control="WinJS.Binding.Template">
+    <div class="item">
+        <img class="item-image" src="#" data-win-bind="src: backgroundImage; alt: title" />
+        <div class="item-overlay">
+            <h4 class="item-title" data-win-bind="textContent: title"></h4>
+        </div>
+    </div>
+</div>
+
+
+<div class="smallListIconTextTemplate" data-win-control="WinJS.Binding.Template">
+        <div class="smallListIconTextItem">
+            <img src="#" class="smallListIconTextItem-Image" data-win-bind="src: imagecode" />
+            <div class="smallListIconTextItem-Detail">
+                <h4 class="win-h4" data-win-bind="textContent: type"></h4>
+                <h6 class="win-h6" data-win-bind="textContent: text"></h6>
+            </div>
+        </div>
+</div>
+
+<div class="smallListIconTextTemplate2" data-win-control="WinJS.Binding.Template" >
+     <div class="smallListIconTextItem2">
+         <img src="#" class="smallListIconTextItem-Image" data-win-bind="src: icon" />
+         <div class="smallListIconTextItem-Detail">
+             <h6 class="win-h6" data-win-bind="textContent: name"></h6>
+             <h8 class="win-h8" ><span  data-win-bind="textContent: amount"></span> Soles</h8>
+         </div>
+        <div class="smallListIconTextMessage" data-win-bind="textContent: messageText"></div>
+     </div>
+ </div>
+
+<div class="smallListIconTextTemplate3" data-win-control="WinJS.Binding.Template" >
+     <div class="smallListIconTextItem3">
+         <img src="#" class="smallListIconTextItem-Image" data-win-bind="src: icon" />
+         <div class="smallListIconTextItem-Detail">
+             <h6 class="win-h6" data-win-bind="textContent: name"></h6>
+             <h8 class="win-h8" ><span  data-win-bind="textContent: amount"></span> Soles</h8>
+            <br/>Cantidad <span data-win-bind="innerText: n"   ></span>
+            <br/><button class="win-button" onclick="Sample.sListItemInvoked()" data-win-bind="value: numero"   >Editar</button>
+         </div>
+     </div>
+ </div>
+
+<div class="smallListIconTextTemplate4" data-win-control="WinJS.Binding.Template" >
+     <div class="smallListIconTextItem4">
+         <div class="smallListIconTextItem-Detail">
+             <h6 class="win-h6" data-win-bind="textContent: description"></h6>
+             Monto: <h8 class="win-h8" ><span  data-win-bind="textContent: amount"></span> Soles</h8>
+           ; Cantidad: <h8 class="win-h8"  data-win-bind="textContent: n"></h8>
+            <br/>Total: <h8 class="win-h8"  ><span  data-win-bind="textContent: total"></span> Soles</h8>            
+         </div>
+     </div>
+ </div>
+
+<div id="messageList" data-win-control="WinJS.UI.Pivot" data-win-options="{ selectedIndex: 0,onitemanimationstart:Sample.hackFixForListView}" >
+    <div class="pivotItem" id="pvi0" data-win-control="WinJS.UI.PivotItem" data-win-options="{ 'header': 'Inicio' }">
+            <div class="groupeditemslist win-selectionstylefilled" aria-label="List of groups" data-win-control="WinJS.UI.ListView" 
+                            data-win-options="{
+                                itemDataSource: Sample.Enque.dataSource,
+                                itemTemplate: select('.itemTemplate'),
+                                selectionMode: 'none',
+                                tapBehavior: 'invokeOnly' ,
+                                oniteminvoked : Sample.sItemInvoked,                                                                                   
+                                layout: { type: WinJS.UI.GridLayout, groupHeaderPosition: 'top' }
+                            }">
+            </div>
+             
+        <br>
+    </div>
+    <div class="pivotItem" id="pvi1" data-win-control="WinJS.UI.PivotItem" data-win-options="{ 'header': 'Incidencias' }"  >
+    <div id="plist" class="listView win-selectionstylefilled lvpedidos" data-win-control="WinJS.UI.ListView"
+         data-win-options="{
+                    itemDataSource: Sample.Mlista.dataSource,
+                    itemTemplate: select('.smallListIconTextTemplate'),
+                    selectionMode: 'single',
+                    onselectionchanged : Sample.sItemSelection,                                         
+                    layout: { type: WinJS.UI.ListLayout, groupHeaderPosition: 'top' },
+                    tapBehavior: 'directSelect'                    
+            }">
+    </div>
+
+    </div>
+
+    <div class="pivotItem" id="pvi2" data-win-control="WinJS.UI.PivotItem" data-win-options="{ 'header': 'Comunicaci&oacute;n' }">
+
+        <div class="headerFooterPlaceholder">
+        <div class="header">
+            <h8 class="win-h8" id="csubtitle" ></h8>
+            <textarea id="messageText" class="win-interactive win-textarea"  rows="4" cols="100" width="600px"></textarea> 
+            <button class="win-button" onclick="wCmds.push({id:wCmdId++,cmd:'addMsg',data:{text:document.querySelector('#messageText').value,uname: username,conversationId:activeConv}});document.querySelector('#messageText').value='';document.querySelector('#messageText').focus();">Enviar</button>            
+        </div>
+        </div>        
+        <div id="chatlist"  class="listView win-selectionstylefilled" data-win-control="WinJS.UI.ListView"
+            data-win-options="{
+                    itemDataSource: Sample.Filterlist.dataSource,
+                    itemTemplate: select('.messageTemplate'),
+                    selectionMode: 'none',
+                    tapBehavior: 'none',
+                    layout: { type: WinJS.UI.ListLayout, groupHeaderPosition: 'top' }
+            }">
+        </div>   
+    </div>
+
+    <div class="pivotItem" id="pvi2" data-win-control="WinJS.UI.PivotItem" data-win-options="{ 'header': 'Conexi&oacute;n' }">
+                <div class="twoColumnFormContainer">
+                    <div class="inputText">
+                        <label>
+                            Usuario<br />
+                            <input class="win-textbox" type="text" name="userName" />
+                        </label>
+                    </div>
+                    <div class="inputPass">
+                        <label>
+                            Password<br />
+                            <input class="win-textbox" type="password" name="password" />
+                        </label>
+                    </div>
+                    <div class="inputEmail">
+                        <label>
+                            Email<br />
+                            <input class="win-textbox" type="email" name="email" />
+                        </label>
+                    </div>
+                    <div class="inputPhone">
+                        <label>
+                            Tel&eacute;fono<br />
+                            <input class="win-textbox" type="tel" name="telephone" />
+                        </label>
+                    </div>
+
+                    <button class="win-button" data-win-options="{}" >Conexi&oacute;n</button>
+                    <button class="win-button" data-win-options="{}" >Cancelar</button>                                      
+                </div>
+
+
+
+    </div>
+</div>
+<div id="labelFlyout" data-win-control="WinJS.UI.Flyout" aria-label="{Modificar T&iacute;tulo }" data-win-bind="onbeforeshow:Sample.formatLabelFlayout" >
+    <div>Modifique el t&iacute;tulo de la p&aacute;gina activa</div>
+    <div><input name="labelPage" id="labelPage"   /></div>
+    <p ></p>
+    <button class="win-button" data-win-options="{onclick:Sample.cancelLabelFlayout}" >Cancelar</button>
+    <button class="win-button" data-win-options="{onclick:Sample.applyLabelFlayout}" >Aplicar</button>
+</div>
+
+    <div id="dialog1" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Seleccionar Pedido',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+        Desea Realizar este Pedido.
+    </div>
+
+ <div id="dialog2" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Iniciar Conversaci&oacute;n',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+<br/>        
+<div class="inputText">            
+        <Label>
+            Instrucciones<br/>
+        <textarea id="messageText" style="width:100%" class="win-interactive win-textarea"  rows="4" cols="20" ></textarea>         
+            </Label>        
+</div>
+<input id="command" type="hidden" value="add" />
+<div class="inputText">            
+            
+        <Label>
+            Direcci&oacute;n (Se indica su direcci&oacute;n actual. Corrija de ser necesario) <br/>
+        <textarea id="address" style="width:100%" class="win-interactive win-textarea"  rows="2" cols="20" ></textarea>                 
+            </Label>        
+</div>
+
+            
+</div>
+
+
+    <div id="dialog3" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Modificar Pedido',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+        <div class="inputText">
+                        <label>
+                            Cantidad:&nbsp;<span id="tcantidad" ></span><br />
+                            <input class="win-range" type="range" id="cantidad" min="1" max="10" oninput="document.querySelector('#dialog3 #tcantidad').innerText=this.value"  onchange="document.querySelector('#dialog3 #tcantidad').innerText=this.value"  />
+                        </label>
+        </div>
+        <div class="inputText">
+                        <label>
+                            Instrucciones<br />
+            <textarea id="indicaciones" class="win-interactive win-textarea"  rows="4" cols="100" width="600px"></textarea> 
+                        </label>
+            <input type="hidden" id="numero"  />                        
+        </div>
+        
+
+        
+    </div>
+    
+    <div id="dialog4" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Crear Cuenta',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+        Desea Crear la Cuenta.
+    </div>
+    <div id="dialog5" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Seleccionar Mesa',
+             primaryCommandText: 'Aceptar'
+        }">
+        Debe seleccionar Una Mesa.
+    </div>
+    <div id="dialog6" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Cancelar Cuenta',
+             primaryCommandText: 'Aceptar',
+             secondaryCommandText: 'Cancelar'
+        }">
+        Desea Cancelar esta Cuenta.
+    </div>
+    <div id="dialog7" data-win-control="WinJS.UI.ContentDialog" data-win-options="{
+             title: 'Error de Datos',
+             primaryCommandText: 'Aceptar'
+        }">
+    </div>
+    
+</body>
+</html>
